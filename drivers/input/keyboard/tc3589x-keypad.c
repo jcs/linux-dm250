@@ -100,6 +100,8 @@ struct tc3589x_keypad_platform_data {
  * @kcol:	number of columns
  * @keymap:     matrix scan code table for keycodes
  * @keypad_stopped: holds keypad status
+ * @fn_pressed: whether Fn modifier is currently pressed down
+ * @fn_state: bitmap representing keys that were pressed while Fn was active
  */
 struct tc_keypad {
 	struct tc3589x *tc3589x;
@@ -109,6 +111,8 @@ struct tc_keypad {
 	unsigned int kcol;
 	unsigned short *keymap;
 	bool keypad_stopped;
+	bool fn_pressed;
+	u8 fn_state[TC3589x_MAX_KPCOL];
 };
 
 static int tc3589x_keypad_init_key_hardware(struct tc_keypad *keypad)
@@ -190,8 +194,10 @@ static irqreturn_t tc3589x_keypad_irq(int irq, void *dev)
 {
 	struct tc_keypad *keypad = dev;
 	struct tc3589x *tc3589x = keypad->tc3589x;
-	u8 i, row_index, col_index, kbd_code, up;
+	int keymap_code;
+	u8 i, row_index, col_index, kbd_code, key_is_down, mask;
 	u8 code;
+	bool fn_state;
 
 	for (i = 0; i < TC35893_DATA_REGS * 2; i++) {
 		kbd_code = tc3589x_reg_read(tc3589x, TC3589x_EVTCODE_FIFO);
@@ -204,12 +210,34 @@ static irqreturn_t tc3589x_keypad_irq(int irq, void *dev)
 		/* valid key is found */
 		col_index = kbd_code & KP_EVCODE_COL_MASK;
 		row_index = (kbd_code & KP_EVCODE_ROW_MASK) >> KP_ROW_SHIFT;
+		mask = BIT(row_index);
+		key_is_down = !(kbd_code & KP_RELEASE_EVT_MASK);
+
+		/*
+		 * Save off the FN key state when the key was pressed,
+		 * and use that to determine the code during a release.
+		 */
+		fn_state = key_is_down
+			? keypad->fn_pressed
+			: keypad->fn_state[col_index] & mask;
+
+		if (fn_state) {
+			keypad->fn_state[col_index] ^= mask;
+			/* The FN layer is a second set of rows. */
+			row_index += TC3589x_MAX_KPROW;
+		}
+
 		code = MATRIX_SCAN_CODE(row_index, col_index,
-						TC35893_KEYPAD_ROW_SHIFT);
-		up = kbd_code & KP_RELEASE_EVT_MASK;
+					TC35893_KEYPAD_ROW_SHIFT);
+
+		keymap_code = keypad->keymap[code];
+		if (keymap_code == KEY_FN) {
+			keypad->fn_pressed = key_is_down;
+			keymap_code = KEY_WAKEUP;
+		}
 
 		input_event(keypad->input, EV_MSC, MSC_SCAN, code);
-		input_report_key(keypad->input, keypad->keymap[code], !up);
+		input_report_key(keypad->input, keymap_code, key_is_down);
 		input_sync(keypad->input);
 	}
 
@@ -415,7 +443,7 @@ static int tc3589x_keypad_probe(struct platform_device *pdev)
 	input->close = tc3589x_keypad_close;
 
 	error = matrix_keypad_build_keymap(plat->keymap_data, NULL,
-					   TC3589x_MAX_KPROW, TC3589x_MAX_KPCOL,
+					   2 * TC3589x_MAX_KPROW, TC3589x_MAX_KPCOL,
 					   NULL, input);
 	if (error) {
 		dev_err(&pdev->dev, "Failed to build keymap\n");
@@ -423,6 +451,7 @@ static int tc3589x_keypad_probe(struct platform_device *pdev)
 	}
 
 	keypad->keymap = input->keycode;
+	memset(keypad->fn_state, 0, sizeof(keypad->fn_state));
 
 	input_set_capability(input, EV_MSC, MSC_SCAN);
 	if (!plat->no_autorepeat)
