@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+#include <dt-bindings/input/input.h>
+
+/ {
+        leds {
+                compatible = "gpio-leds";
+                status = "okay";
+                
+                green_led {
+                        label = "pomera:green:power";
+                        gpios = <&gpio1 RK_PB4 GPIO_ACTIVE_HIGH>;
+                        default-state = "on";
+                        pinctrl-names = "default";
+                        pinctrl-0 = <&green_led_pin>;
+                };
+                
+                red_led {
+                        label = "pomera:red:power";
+                        gpios = <&gpio1 RK_PB0 GPIO_ACTIVE_HIGH>;
+                        /* default-state = "off"; */
+			linux,default-trigger = "heartbeat";
+                        pinctrl-names = "default";
+                        pinctrl-0 = <&red_led_pin>;
+                };
+        };
+};
+
+&pinctrl {
+        leds {
+                green_led_pin: green-led-pin {
+                        rockchip,pins = <1 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
+                };
+
+                red_led_pin: red-led-pin {
+                        rockchip,pins = <1 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
+                };
+        };
+};

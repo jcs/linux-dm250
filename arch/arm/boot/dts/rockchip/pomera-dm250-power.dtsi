@@ -1,5 +1,19 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 
+&pinctrl {
+	pmic {
+		pmic_int_l: pmic-int-l {
+                        rockchip,pins = <3 22 RK_FUNC_GPIO &pcfg_pull_none>;
+			/* rockchip,pins = <1 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>; */
+		};
+
+		/* Pin for switching state between sleep and non-sleep state */
+		pmic_sleep: pmic-sleep {
+			rockchip,pins = <1 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+        };
+};
+
 / {
 	vcc_sys: vcc-sys {
 		compatible = "regulator-fixed";

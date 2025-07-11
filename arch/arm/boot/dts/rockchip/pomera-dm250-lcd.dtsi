@@ -1,5 +1,19 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 
+&pinctrl {
+	display {
+		lcd_cs: lcd-cs {
+			rockchip,pins = <0 RK_PD0 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
+        backlight {
+		bl_en: bl-en {
+			rockchip,pins = <0 RK_PD3 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+        };
+};
+
 / {
 	backlight: backlight {
                 compatible = "pwm-backlight";

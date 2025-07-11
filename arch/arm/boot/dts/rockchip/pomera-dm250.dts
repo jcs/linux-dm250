@@ -1,0 +1,93 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/dts-v1/;
+
+#include "rk3128-pomera.dts"
+#include "pomera-dm250-led.dtsi"
+#include "pomera-dm250-kbd.dtsi"
+#include "pomera-dm250-lcd.dtsi"
+#include "pomera-dm250-power.dtsi"
+#include "pomera-dm250-usb.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+#include <dt-bindings/pwm/pwm.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	model = "Rockchip RK3128 Pomera DM250";
+	compatible = "rockchip,pomera-dm250", "rockchip,rk3128";
+
+	chosen {
+		bootargs = "debug earlycon=uart8250,mmio32,0x20064000 console=ttyS1,115200n8 root=/dev/mmcblk1p2 rw rootwait";
+	};
+	
+	aliases {
+		mmc0 = &emmc;
+		mmc1 = &sdmmc;
+	};
+        
+	memory@60000000 {
+		device_type = "memory";
+		reg = <0x60000000 0x40000000>;
+	};
+
+};
+
+&cpu0 {
+	cpu-supply = <&vdd_arm>;
+};
+
+&cpu1 {
+	cpu-supply = <&vdd_arm>;
+};
+
+&cpu2 {
+	cpu-supply = <&vdd_arm>;
+};
+
+&cpu3 {
+	cpu-supply = <&vdd_arm>;
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <400000>;
+};
+
+&saradc {
+	status = "okay";
+	vref-supply = <&vcc_io>;
+};
+
+&sdmmc {
+	card-detect-delay = <200>;
+	bus-width = <4>;
+	supports-sd;
+	broken-cd;
+	cd-gpios = <&gpio1 RK_PC1 GPIO_ACTIVE_HIGH>;
+	cap-sdio-irq;
+	cap-mmc-highspeed;
+	cap-sd-highspeed;
+	vmmc-supply = <&vcc_sd>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_bus4 &sdmmc_det>;
+	rockchip,default-sample-phase=<90>;
+	status = "okay";
+};
+
+&emmc {
+	bus-width = <8>;
+	cap-mmc-highspeed;
+	supports-emmc;
+	disable-wp;
+	non-removable;
+	num-slots = <1>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_bus8>;
+	status = "okay";
+};
+
+/* for debug uart */
+&uart1 {
+        status = "okay";
+};
