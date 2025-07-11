@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+&sdmmc {
+	card-detect-delay = <200>;
+	bus-width = <4>;
+	supports-sd;
+	broken-cd;
+	cd-gpios = <&gpio1 RK_PC1 GPIO_ACTIVE_HIGH>;
+	cap-sdio-irq;
+	cap-mmc-highspeed;
+	cap-sd-highspeed;
+	vmmc-supply = <&vcc_sd>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_bus4 &sdmmc_det>;
+	rockchip,default-sample-phase=<90>;
+	status = "okay";
+};
+
+&emmc {
+	bus-width = <8>;
+	cap-mmc-highspeed;
+	supports-emmc;
+	disable-wp;
+	non-removable;
+	num-slots = <1>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_bus8>;
+	status = "okay";
+};
