@@ -117,10 +117,11 @@
 };
 
 &vop {
+	post-init-providers = <&lvds>;
 	status = "okay";
 };
 
-&video_phy {
+&dphy {
 	status = "okay";
 };
 
