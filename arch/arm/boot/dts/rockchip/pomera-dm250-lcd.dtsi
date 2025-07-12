@@ -129,10 +129,7 @@
 	rockchip,skip-mmu-read;
 };
 
-/* not works yet */
 &gpu {
-	status = "disabled";
-	/* status = "okay"; */
+	status = "okay";
 	mali-supply = <&vdd_logic>;
-	/* memory-region = <&display_pool>; */
 };
