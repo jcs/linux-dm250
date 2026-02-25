@@ -21,6 +21,7 @@
 
 	chosen {
 		bootargs = "debug earlycon=uart8250,mmio32,0x20064000 console=ttyS1,115200n8 root=/dev/mmcblk1p2 rw rootwait";
+		stdout-path = &uart1;
 	};
 	
 	aliases {
@@ -62,5 +63,9 @@
 
 /* for debug uart */
 &uart1 {
-        status = "okay";
+	status = "okay";
+};
+
+&watchdog {
+	status = "okay";
 };
