@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/dts-v1/;
+
+#include "pomera-dm250.dts"
+
+/ {
+	model = "Rockchip RK3128 Pomera DM250US";
+};
+
+&i2c3 {
+	status = "okay";
+
+	/* these only exist on the DM250US */
+	bq27z558-battery@55 {
+		compatible = "ti,bq27z561";
+		reg = <0x55>;
+		gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>,
+			<&gpio0 RK_PB5 GPIO_ACTIVE_LOW>;
+		status = "okay";
+	};
+
+	bq256xx-charger@6b {
+		compatible = "ti,bq25620";
+		reg = <0x6b>;
+		gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_LOW>;
+		ti,watchdog-timeout-ms = <0>;
+		charge-current-limit-microamp = <2880000>;
+		charge-voltage-limit-microvolt = <4230000>;
+		input-current-limit-microamp = <3000000>;
+		pre-charge-control-microamp = <580000>;
+		termination-control-microamp = <150000>;
+		ti,no-thermistor = <1>;
+		status = "okay";
+	};
+};
