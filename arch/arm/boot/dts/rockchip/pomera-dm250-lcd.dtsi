@@ -90,7 +90,7 @@
 &lvds {
 	rockchip,grf = <&grf>;
         rockchip,data-mapping = "jeida";
-        rockchip,data-width = <18>;
+        rockchip,data-width = <24>;
         rockchip,output = "lvds";
         status = "okay";
 
