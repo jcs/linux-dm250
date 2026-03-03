@@ -26,8 +26,42 @@
 
 	bat: battery {
 		compatible = "simple-battery";
+
+		/* 5800 mAh */
+		charge-full-design-microamp-hours = <5800000>;
+		/* 4200 mV */
+		voltage-max-design-microvolt = <4200000>;
+		/* 3400 mV */
 		voltage-min-design-microvolt = <3400000>;
-		voltage-max-design-microvolt = <4350000>;
+		/* 2800 mA */
+		constant-charge-current-max-microamp = <2800000>;
+		/* 4200 mV */
+		constant-charge-voltage-max-microvolt = <4200000>;
+		/* 45 mOhm */
+		resistance-micro-ohms = <45000>;
+		ocv-capacity-celsius = <20>;
+		ocv-capacity-table-0 =
+			<4200000 100>,
+			<4137000 95>,
+			<4103000 90>,
+			<4068000 85>,
+			<4034000 80>,
+			<3988000 75>,
+			<3937000 70>,
+			<3914000 65>,
+			<3891000 60>,
+			<3869000 55>,
+			<3848000 50>,
+			<3828000 45>,
+			<3808000 40>,
+			<3788000 35>,
+			<3765000 30>,
+			<3743000 25>,
+			<3716000 20>,
+			<3685000 15>,
+			<3669000 10>,
+			<3638000 5>,
+			<3400000 0>;
 	};
 };
 
