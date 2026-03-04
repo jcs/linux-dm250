@@ -4,8 +4,8 @@
 	card-detect-delay = <200>;
 	bus-width = <4>;
 	supports-sd;
-	broken-cd;
 	cd-gpios = <&gpio1 RK_PC1 GPIO_ACTIVE_HIGH>;
+	cd-inverted;
 	cap-sdio-irq;
 	cap-mmc-highspeed;
 	cap-sd-highspeed;
