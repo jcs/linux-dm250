@@ -1,5 +1,35 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 
+/ {
+	vcc_wifi: vcc-wifi {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-wifi";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpio0 RK_PD6 GPIO_ACTIVE_LOW>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_pwr_en>;
+		startup-delay-us = <100000>;
+	};
+
+	sdio_pwrseq: sdio-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&gpio3 RK_PD3 GPIO_ACTIVE_LOW>;
+		post-power-on-delay-ms = <200>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_reset>;
+	};
+
+	wifi {
+		compatible = "brcm,bcm4329-fmac";
+		interrupt-parent = <&gpio3>;
+		interrupts = <RK_PC7 IRQ_TYPE_LEVEL_LOW>;
+		interrupt-names = "host-wake";
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_host_wake_irq>;
+	};
+};
+
 &pinctrl {
 	wifi {
 		wifi_pwr_en: wifi-pwr-en {
@@ -16,21 +46,31 @@
 	};
 };
 
-/* for wifi, not yet works */
+/* for wifi */
 &sdio {
-	/* max-frequency = <50000000>; */
-	supports-sdio;
-	disable-wp;
+	bus-width = <4>;
 	cap-sd-highspeed;
 	cap-sdio-irq;
 	keep-power-in-suspend;
+	non-removable;
+	vmmc-supply = <&vcc_wifi>;
+	mmc-pwrseq = <&sdio_pwrseq>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&sdio_cmd &sdio_clk &sdio_bus4>;
-	/* mmc-pwrseq = <&sdio_pwrseq>; */
-	non-removable;
-	sd-uhs-sdr104;
-	/* status = "okay"; */
-	status = "disabled";
+	fifo-mode;
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	brcmf: wifi@1 {
+		compatible = "brcm,bcm4329-fmac";
+		reg = <1>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <RK_PC7 IRQ_TYPE_LEVEL_LOW>;
+		interrupt-names = "host-wake";
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_host_wake_irq>;
+	};
 };
 
 /* for wifi, not yet works */
