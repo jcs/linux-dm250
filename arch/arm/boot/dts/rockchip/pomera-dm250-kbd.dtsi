@@ -81,7 +81,7 @@
 	tc3589x@45 {
 		compatible = "toshiba,tc35894";
 		reg = <0x45>;
-		reset-gpios = <&gpio0 RK_PD1 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&gpio0 RK_PD1 GPIO_ACTIVE_HIGH>;
 		interrupt-parent = <&gpio0>;
 		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
 		pinctrl-names = "default";
