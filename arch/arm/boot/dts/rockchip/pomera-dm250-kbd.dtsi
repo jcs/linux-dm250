@@ -56,11 +56,10 @@
                         wakeup-source;
                 };
 
-		// Former Right Shift
-                key-forward {
-                        label = "Forward";
+                key-right-shift {
+                        label = "Right Shift";
                         gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_LOW>;
-                        linux,code = <KEY_FORWARD>;
+                        linux,code = <KEY_RIGHTSHIFT>;
                         debounce-interval = <50>;
                         wakeup-source;
                 };
