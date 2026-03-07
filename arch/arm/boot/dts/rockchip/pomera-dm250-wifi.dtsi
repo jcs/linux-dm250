@@ -31,6 +31,28 @@
 };
 
 &pinctrl {
+	bt {
+		bt_reset: bt-reset {
+			rockchip,pins = <3 RK_PC5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		bt_wake: bt-wake {
+			rockchip,pins = <3 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		bt_host_wake: bt-host-wake {
+			rockchip,pins = <3 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		bt_rts_gpio: bt-rts-gpio {
+			rockchip,pins = <0 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		bt_rts_uart: bt-rts-uart {
+			rockchip,pins = <0 RK_PC1 2 &pcfg_pull_none>;
+		};
+	};
+
 	wifi {
 		wifi_pwr_en: wifi-pwr-en {
 			rockchip,pins = <0 RK_PD6 RK_FUNC_GPIO &pcfg_pull_none>;
@@ -73,12 +95,19 @@
 	};
 };
 
-/* for wifi, not yet works */
+/* for bt */
 &uart0 {
-	status = "disabled";
-};
+	status = "okay";
 
-/* for bt, not yet works */
-&uart2 {
-	status = "disabled";
+	bluetooth {
+		compatible = "brcm,bcm43438-bt";
+		shutdown-gpios = <&gpio3 RK_PC5 GPIO_ACTIVE_HIGH>;
+		device-wakeup-gpios = <&gpio3 RK_PD2 GPIO_ACTIVE_HIGH>;
+		host-wakeup-gpios = <&gpio3 RK_PC6 GPIO_ACTIVE_LOW>;
+		uart-rts-gpios = <&gpio0 RK_PC1 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default", "rts-gpio", "rts-uart";
+		pinctrl-0 = <&bt_reset &bt_wake &bt_host_wake>;
+		pinctrl-1 = <&bt_rts_gpio>;
+		pinctrl-2 = <&bt_rts_uart>;
+	};
 };
