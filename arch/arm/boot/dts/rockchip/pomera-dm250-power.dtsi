@@ -3,7 +3,7 @@
 &pinctrl {
 	pmic {
 		pmic_int_l: pmic-int-l {
-                        rockchip,pins = <3 22 RK_FUNC_GPIO &pcfg_pull_none>;
+			rockchip,pins = <3 22 RK_FUNC_GPIO &pcfg_pull_none>;
 			/* rockchip,pins = <1 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>; */
 		};
 
@@ -11,7 +11,7 @@
 		pmic_sleep: pmic-sleep {
 			rockchip,pins = <1 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
-        };
+	};
 };
 
 / {
@@ -73,19 +73,13 @@
 		status = "okay";
 		reg = <0x1c>;
 		clock-output-names = "rk818-clkout1", "rk818-clkout2";
-
-		/** from vendor's 3.10 kernel -- conflicts with uart?! **/
-		/* interrupt-parent = <&gpio1>; */
-		/* interrupts = <9 IRQ_TYPE_EDGE_FALLING>; */
-
-		/** placeholder -- does not seem to be connected to anything  **/
 		interrupt-parent = <&gpio3>;
 		interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
-		
+
 		pinctrl-names = "default";
 		pinctrl-0 = <&pmic_int_l>;
 		rockchip,system-power-controller;
-                rk818,support_dc_chg = <1>; /*1: dc chg; 0:usb chg*/
+		rk818,support_dc_chg = <1>; /*1: dc chg; 0:usb chg*/
 		wakeup-source;
 		#clock-cells = <1>;
 		extcon = <&usb2phy>;
@@ -260,7 +254,6 @@
 				};
 			};
 
-                        /* lcd ? */
 			vcc_lcd: SWITCH_REG {
 				regulator-name = "vcc_lcd";
 				regulator-always-on;
@@ -274,26 +267,26 @@
 		/* not yet works */
 		battery {
 			compatible = "rk818-battery";
-                        ocv_table = <3400 3638 3669 3685 3716 3743 3765
-				     3788 3808 3828 3848 3869 3891 3914 3937 3988 4034
-				     4068 4103 4137 4200>;
-		        design_capacity = <5800>;
-		        design_qmax = <6380>;
-		        bat_res = <45>;
-		        max_input_current = <3000>;
-		        max_chrg_current = <2800>;
-		        max_chrg_voltage = <4200>;
-		        sleep_enter_current = <300>;
-		        sleep_exit_current = <300>;
-		        sleep_filter_current = <100>;
-		        power_off_thresd = <3400>;
-		        zero_algorithm_vol = <3850>;
-		        energy_mode = <0>;
-		        fb_temperature = <105>;
-		        max_soc_offset = <60>;
-		        monitor_sec = <5>;
-		        virtual_power = <0>;
-		        power_dc2otg = <0>; /* disable 5v out */
+			ocv_table = <3400 3638 3669 3685 3716 3743 3765
+				     3788 3808 3828 3848 3869 3891 3914
+				     3937 3988 4034 4068 4103 4137 4200>;
+			design_capacity = <5800>;
+			design_qmax = <6380>;
+			bat_res = <45>;
+			max_input_current = <3000>;
+			max_chrg_current = <2800>;
+			max_chrg_voltage = <4200>;
+			sleep_enter_current = <300>;
+			sleep_exit_current = <300>;
+			sleep_filter_current = <100>;
+			power_off_thresd = <3400>;
+			zero_algorithm_vol = <3850>;
+			energy_mode = <0>;
+			fb_temperature = <105>;
+			max_soc_offset = <60>;
+			monitor_sec = <5>;
+			virtual_power = <0>;
+			power_dc2otg = <0>; /* disable 5v out */
 		};
 
 		/* not yet works -- not supported in mainline? */

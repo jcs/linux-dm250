@@ -23,12 +23,12 @@
 		bootargs = "debug earlycon=uart8250,mmio32,0x20064000 console=ttyS1,115200n8 root=/dev/mmcblk1p2 rw rootwait";
 		stdout-path = &uart1;
 	};
-	
+
 	aliases {
 		mmc0 = &emmc;
 		mmc1 = &sdmmc;
 	};
-        
+
 	memory@60000000 {
 		device_type = "memory";
 		reg = <0x60000000 0x40000000>;

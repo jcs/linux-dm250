@@ -5,7 +5,7 @@
 		host_vbus_drv: host-vbus-drv {
 			rockchip,pins = <3 RK_PC4 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
-                
+
 		otg_vbus_drv: otg-vbus-drv {
 			rockchip,pins = <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
 		};

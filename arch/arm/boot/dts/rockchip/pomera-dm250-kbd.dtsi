@@ -1,30 +1,30 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 #include <dt-bindings/input/input.h>
 
- &pinctrl {
+&pinctrl {
 	button_pins {
-                pwr_key_l: pwr-key-l {
-                        rockchip,pins = <0 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
-                };
-                
-                lid_int_l: lid-int-l {
-                        rockchip,pins = <0 RK_PC4 RK_FUNC_GPIO &pcfg_pull_none>;
-                };
+		pwr_key_l: pwr-key-l {
+			rockchip,pins = <0 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
 
-                kbd_rshift_l: kbd-rshift-l {
-                        rockchip,pins = <0 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
-                };
+		lid_int_l: lid-int-l {
+			rockchip,pins = <0 RK_PC4 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
 
-                kbd_alt_l: kbd-alt-l {
-                        rockchip,pins = <0 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
-                };
-        };
+		kbd_rshift_l: kbd-rshift-l {
+			rockchip,pins = <0 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
 
-        tc3589x {
+		kbd_alt_l: kbd-alt-l {
+			rockchip,pins = <0 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
+	tc3589x {
 		tc3589x_int_l: tc3589x-int-l {
 			rockchip,pins = <0 RK_PA7 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
-                
+
 		tc3589x_reset: tc3589x-reset {
 			rockchip,pins = <0 RK_PD1 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
@@ -36,7 +36,6 @@
 		compatible = "gpio-keys";
 		pinctrl-names = "default";
 		pinctrl-0 = <&pwr_key_l &lid_int_l &kbd_rshift_l &kbd_alt_l>;
-		/* autorepeat; */
 		status = "okay";
 
 		key-power {
@@ -48,29 +47,29 @@
 		};
 
 		switch-lid {
-                        label = "Lid Switch";
-                        gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_LOW>;
-                        linux,code = <SW_LID>;
-                        linux,input-type = <EV_SW>;
-                        debounce-interval = <100>;
-                        wakeup-source;
-                };
+			label = "Lid Switch";
+			gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_LOW>;
+			linux,code = <SW_LID>;
+			linux,input-type = <EV_SW>;
+			debounce-interval = <100>;
+			wakeup-source;
+		};
 
-                key-right-shift {
-                        label = "Right Shift";
-                        gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_LOW>;
-                        linux,code = <KEY_RIGHTSHIFT>;
-                        debounce-interval = <50>;
-                        wakeup-source;
-                };
+		key-right-shift {
+			label = "Right Shift";
+			gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RIGHTSHIFT>;
+			debounce-interval = <50>;
+			wakeup-source;
+		};
 
-                left-alt {
-                        label = "Left Alt";
-                        gpios = <&gpio0 RK_PB5 GPIO_ACTIVE_LOW>;
-                        linux,code = <KEY_LEFTALT>;
-                        debounce-interval = <50>;
-                        wakeup-source;
-                };
+		left-alt {
+			label = "Left Alt";
+			gpios = <&gpio0 RK_PB5 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_LEFTALT>;
+			debounce-interval = <50>;
+			wakeup-source;
+		};
 	};
 };
 
@@ -88,7 +87,7 @@
 		interrupt-controller;
 		#interrupt-cells = <1>;
 		status = "okay";
-		
+
 		tc3589x_keypad {
 			compatible = "toshiba,tc3589x-keypad";
 			debounce-delay-ms = <50>;
@@ -181,14 +180,13 @@
 				MATRIX_KEY(12, 1,  KEY_HOME) /* Fn-LEFT */
 				MATRIX_KEY(12, 2,  KEY_PAGEDOWN) /* Fn-DOWN */
 				MATRIX_KEY(12, 11, KEY_FN) /* Fn */
-				MATRIX_KEY(13, 9,  KEY_BATTERY) // Fn-F4
+				MATRIX_KEY(13, 9,  KEY_BATTERY) /* Fn-F4 */
 				MATRIX_KEY(14, 1,  KEY_PAGEUP) /* Fn-UP */
-				MATRIX_KEY(14, 9,  KEY_RFKILL) // Fn-F5
-				MATRIX_KEY(15, 9,  KEY_DISPLAY_OFF) // Fn-F3
-				MATRIX_KEY(15, 10, KEY_BRIGHTNESSDOWN) // Fn-F1
-				MATRIX_KEY(15, 11, KEY_BRIGHTNESSUP) // Fn-F2
+				MATRIX_KEY(14, 9,  KEY_RFKILL) /* Fn-F5 */
+				MATRIX_KEY(15, 9,  KEY_DISPLAY_OFF) /* Fn-F3 */
+				MATRIX_KEY(15, 10, KEY_BRIGHTNESSDOWN) /* Fn-F1 */
+				MATRIX_KEY(15, 11, KEY_BRIGHTNESSUP) /* Fn-F2 */
 			>;
 		};
 	};
-
 };

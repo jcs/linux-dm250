@@ -95,7 +95,7 @@
 	};
 };
 
-/* for bt */
+/* for bluetooth */
 &uart0 {
 	status = "okay";
 
