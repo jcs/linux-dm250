@@ -4,7 +4,7 @@
 #include "pomera-dm250.dts"
 
 / {
-	model = "Rockchip RK3128 Pomera DM250US";
+	model = "KING JIM Pomera DM250US";
 };
 
 &i2c3 {

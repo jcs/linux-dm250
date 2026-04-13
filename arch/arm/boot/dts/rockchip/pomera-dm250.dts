@@ -16,7 +16,7 @@
 #include <dt-bindings/input/input.h>
 
 / {
-	model = "Rockchip RK3128 Pomera DM250";
+	model = "KING JIM Pomera DM250";
 	compatible = "rockchip,pomera-dm250", "rockchip,rk3128";
 
 	chosen {
