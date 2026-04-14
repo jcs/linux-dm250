@@ -2,6 +2,7 @@
 /dts-v1/;
 
 #include "pomera-dm250.dts"
+#include "pomera-dm250us-kbd.dtsi"
 
 / {
 	model = "KING JIM Pomera DM250US";
@@ -10,7 +11,6 @@
 &i2c3 {
 	status = "okay";
 
-	/* these only exist on the DM250US */
 	bq27z558-battery@55 {
 		compatible = "ti,bq27z561";
 		reg = <0x55>;

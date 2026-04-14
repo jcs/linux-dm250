@@ -1,0 +1,160 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+&pinctrl {
+	button_pins {
+		kbd_alt_l: kbd-alt-l {
+			rockchip,pins = <0 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		kbd_lctrl_l: kbd-lctrl-l {
+			rockchip,pins = <0 RK_PB3 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		kbd_rctrl_l: kbd-rctrl-l {
+			rockchip,pins = <0 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		kbd_lshift_l: kbd-lshift-l {
+			rockchip,pins = <0 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
+	tc3589x {
+		tc3589x_int_l: tc3589x-int-l {
+			rockchip,pins = <2 RK_PC0 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+};
+
+/ {
+	gpio-keys {
+		pinctrl-0 = <&pwr_key_l &lid_int_l &kbd_rshift_l &kbd_alt_l
+			     &kbd_lctrl_l &kbd_rctrl_l &kbd_lshift_l>;
+
+		left-alt {
+			gpios = <&gpio0 RK_PB1 GPIO_ACTIVE_LOW>;
+		};
+
+		key-left-ctrl {
+			label = "Left Ctrl";
+			gpios = <&gpio0 RK_PB3 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_LEFTCTRL>;
+			debounce-interval = <50>;
+		};
+
+		key-right-ctrl {
+			label = "Right Ctrl";
+			gpios = <&gpio0 RK_PB6 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RIGHTCTRL>;
+			debounce-interval = <50>;
+		};
+
+		key-left-shift {
+			label = "Left Shift";
+			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_LEFTSHIFT>;
+			debounce-interval = <50>;
+		};
+	};
+};
+
+&i2c0 {
+	/delete-node/ tc3589x@45;
+};
+
+&i2c2 {
+	status = "okay";
+
+	tc3589x@45 {
+		compatible = "toshiba,tc35894";
+		reg = <0x45>;
+		reset-gpios = <&gpio0 RK_PD1 GPIO_ACTIVE_HIGH>;
+		interrupt-parent = <&gpio2>;
+		interrupts = <RK_PC0 IRQ_TYPE_EDGE_FALLING>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&tc3589x_int_l &tc3589x_reset>;
+		interrupt-controller;
+		#interrupt-cells = <1>;
+		status = "okay";
+
+		tc3589x_keypad {
+			compatible = "toshiba,tc3589x-keypad";
+			debounce-delay-ms = <50>;
+			keypad,num-rows = <8>; /* not counting Fn layer */
+			keypad,num-columns = <11>;
+			wakeup-source;
+			linux,keymap = <
+				MATRIX_KEY(0, 0,  KEY_LEFT)
+				MATRIX_KEY(0, 4,  KEY_DOT)
+				MATRIX_KEY(0, 5,  KEY_COMMA)
+				MATRIX_KEY(0, 6,  KEY_M)
+				MATRIX_KEY(0, 7,  KEY_V)
+				MATRIX_KEY(0, 8,  KEY_C)
+				MATRIX_KEY(0, 9,  KEY_Z)
+				MATRIX_KEY(0, 10, KEY_X)
+				MATRIX_KEY(1, 0,  KEY_UP)
+				MATRIX_KEY(1, 2,  KEY_ENTER)
+				MATRIX_KEY(1, 3,  KEY_SEMICOLON)
+				MATRIX_KEY(1, 4,  KEY_L)
+				MATRIX_KEY(1, 5,  KEY_K)
+				MATRIX_KEY(1, 6,  KEY_J)
+				MATRIX_KEY(1, 7,  KEY_F)
+				MATRIX_KEY(1, 8,  KEY_D)
+				MATRIX_KEY(1, 9,  KEY_A)
+				MATRIX_KEY(1, 10, KEY_S)
+				MATRIX_KEY(2, 0,  KEY_DOWN)
+				MATRIX_KEY(2, 2,  KEY_BACKSLASH)
+				MATRIX_KEY(2, 3,  KEY_P)
+				MATRIX_KEY(2, 4,  KEY_O)
+				MATRIX_KEY(2, 5,  KEY_I)
+				MATRIX_KEY(2, 6,  KEY_U)
+				MATRIX_KEY(2, 7,  KEY_R)
+				MATRIX_KEY(2, 8,  KEY_E)
+				MATRIX_KEY(2, 9,  KEY_Q)
+				MATRIX_KEY(2, 10, KEY_W)
+				MATRIX_KEY(3, 0,  KEY_RIGHT)
+				MATRIX_KEY(3, 2,  KEY_INSERT)
+				MATRIX_KEY(3, 3,  KEY_9)
+				MATRIX_KEY(3, 4,  KEY_8)
+				MATRIX_KEY(3, 5,  KEY_7)
+				MATRIX_KEY(3, 6,  KEY_6)
+				MATRIX_KEY(3, 7,  KEY_3)
+				MATRIX_KEY(3, 8,  KEY_2)
+				MATRIX_KEY(3, 9,  KEY_GRAVE)
+				MATRIX_KEY(3, 10, KEY_1)
+				MATRIX_KEY(4, 2,  KEY_BACKSPACE)
+				MATRIX_KEY(4, 3,  KEY_SLASH)
+				MATRIX_KEY(4, 4,  KEY_DELETE)
+				MATRIX_KEY(4, 6,  KEY_N)
+				MATRIX_KEY(4, 7,  KEY_F6)
+				MATRIX_KEY(4, 8,  KEY_B)
+				MATRIX_KEY(5, 2,  KEY_EQUAL)
+				MATRIX_KEY(5, 3,  KEY_LEFTBRACE)
+				MATRIX_KEY(5, 4,  KEY_F8)
+				MATRIX_KEY(5, 5,  KEY_RIGHTBRACE)
+				MATRIX_KEY(5, 6,  KEY_Y)
+				MATRIX_KEY(5, 7,  KEY_T)
+				MATRIX_KEY(5, 8,  KEY_F4)
+				MATRIX_KEY(5, 9,  KEY_TAB)
+				MATRIX_KEY(5, 10, KEY_CAPSLOCK)
+				MATRIX_KEY(6, 1,  KEY_SPACE)
+				MATRIX_KEY(6, 3,  KEY_APOSTROPHE)
+				MATRIX_KEY(6, 5,  KEY_F7)
+				MATRIX_KEY(6, 6,  KEY_H)
+				MATRIX_KEY(6, 7,  KEY_G)
+				MATRIX_KEY(6, 8,  KEY_F5)
+				MATRIX_KEY(6, 9,  KEY_ESC)
+				MATRIX_KEY(6, 10, KEY_MENU)
+				MATRIX_KEY(7, 2,  KEY_F10)
+				MATRIX_KEY(7, 3,  KEY_0)
+				MATRIX_KEY(7, 4,  KEY_F9)
+				MATRIX_KEY(7, 5,  KEY_MINUS)
+				MATRIX_KEY(7, 6,  KEY_5)
+				MATRIX_KEY(7, 7,  KEY_4)
+				MATRIX_KEY(7, 8,  KEY_F3)
+				MATRIX_KEY(7, 9,  KEY_F1)
+				MATRIX_KEY(7, 10, KEY_F2)
+			>;
+		};
+	};
+};
