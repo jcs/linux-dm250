@@ -6,6 +6,9 @@
 
 / {
 	model = "KING JIM Pomera DM250US";
+
+	/* LEDs are driven directly by BQ256XX */
+	/delete-node/ leds;
 };
 
 &i2c3 {
