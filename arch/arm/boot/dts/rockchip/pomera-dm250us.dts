@@ -7,8 +7,15 @@
 / {
 	model = "KING JIM Pomera DM250US";
 
-	/* LEDs are driven directly by BQ256XX */
+	/* LEDs are driven directly by BQ25620 */
 	/delete-node/ leds;
+
+	/delete-node/ battery;
+};
+
+&rk818 {
+	/delete-node/ battery;
+	/delete-node/ charger;
 };
 
 &i2c3 {
