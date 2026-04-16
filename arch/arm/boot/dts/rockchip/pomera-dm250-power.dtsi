@@ -264,7 +264,6 @@
 			};
 		};
 
-		/* not yet works */
 		battery {
 			compatible = "rk818-battery";
 			ocv_table = <3400 3638 3669 3685 3716 3743 3765
@@ -289,7 +288,6 @@
 			power_dc2otg = <0>; /* disable 5v out */
 		};
 
-		/* not yet works -- not supported in mainline? */
 		charger {
 			compatible = "rockchip,rk818-charger";
 			monitored-battery = <&bat>;
